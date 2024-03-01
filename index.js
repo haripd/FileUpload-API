@@ -4,6 +4,8 @@ const dotenv = require('dotenv')
 dotenv.config()
 const cors = require('cors')
 const { StatusCodes } = require('http-status-codes')
+const connectDb = require('./db/config')
+
 
 //import port
 const PORT = process.env.PORT
@@ -42,4 +44,5 @@ app.all(`**`, async(req, res)=>{
 //server listener
 app.listen(PORT, () => {
     console.log(`server is running @ http://localhost:${PORT}`)
+    connectDb()
 })

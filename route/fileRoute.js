@@ -9,6 +9,6 @@ fileRoute.get(`/all`, readAllFiles)
 
 fileRoute.get(`/single/:id`, readSingleFile)
 
-fileRoute.get(`/delete/:id`, deleteFile)
+fileRoute.delete(`/delete/:id`, deleteFile)
 
 module.exports = fileRoute
