@@ -1,8 +1,16 @@
 const {StatusCodes} = require('http-status-codes')
+const File = require('../model/file')
 // upload - post
 const uploadFile = async (req, res)=>{
     try {
-        res.status(StatusCodes.CREATED).json({msg:'Upload file'})
+        // to read file data -> req.file
+        let data = req.file
+        let extFile = await File.findOne({originalname: data.originalname})
+        if(extFile)
+            return res.status(StatusCodes.CONFLICT).json({msg : "file already exists"})
+        let newFile = await File.create(data)
+
+        res.status(StatusCodes.CREATED).json({status: true, msg: "file uploaded", file: newFile})
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status: false, msg: error})
     }
@@ -11,7 +19,8 @@ const uploadFile = async (req, res)=>{
 //read all files - get method
 const readAllFiles = async (req, res)=>{
     try {
-        res.status(StatusCodes.ACCEPTED).json({msg:'read all file'})
+        let data = await File.find({})
+        res.status(StatusCodes.ACCEPTED).json({status: true, length:data.length, files:data})
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status: false, msg: error})
     }
@@ -20,7 +29,12 @@ const readAllFiles = async (req, res)=>{
 //read single file -get(id)
 const readSingleFile = async (req, res)=>{
     try {
-        res.status(StatusCodes.ACCEPTED).json({msg:'read single file'})
+        let id = req.params.id
+        let extFile = await File.findById(id)
+        if(!extFile)
+            return res.status(StatusCodes.NOT_FOUND).json({status:false, msg:"Requested id not found"})
+
+        res.status(StatusCodes.ACCEPTED).json({status: true, file: extFile})
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status: false, msg: error})
     }
@@ -29,7 +43,13 @@ const readSingleFile = async (req, res)=>{
 //delete file - get(id) method
 const deleteFile = async (req, res)=>{
     try {
-        res.status(StatusCodes.ACCEPTED).json({msg:'delete file'})
+        let id = req.params.id
+        let extFile = await File.findById(id)
+        if(!extFile)
+            return res.status(StatusCodes.NOT_FOUND).json({status:false, msg:"Requested id not found"})
+
+        await File.findByIdAndDelete(id)    
+        res.status(StatusCodes.ACCEPTED).json({status:true, msg:"File deleted successfully"})
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status: false, msg: error})
     }
