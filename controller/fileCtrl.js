@@ -1,5 +1,6 @@
 const {StatusCodes} = require('http-status-codes')
 const File = require('../model/file')
+const fs = require('fs')
 // upload - post
 const uploadFile = async (req, res)=>{
     try {
@@ -48,6 +49,7 @@ const deleteFile = async (req, res)=>{
         if(!extFile)
             return res.status(StatusCodes.NOT_FOUND).json({status:false, msg:"Requested id not found"})
 
+        await fs.unlinkSync(extFile.path)  //delete from location  
         await File.findByIdAndDelete(id)    
         res.status(StatusCodes.ACCEPTED).json({status:true, msg:"File deleted successfully"})
     } catch (error) {

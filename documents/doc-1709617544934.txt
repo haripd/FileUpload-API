@@ -1,0 +1,27 @@
+REACT INSTALLATION
+    1. We will learn to install REACT
+
+    2. We will start with "create-react-app"
+
+    3. Prerequisite
+        a. Editor - Visual Studio Code 
+        b. Node 
+        c. npm 
+
+    4. npm install -g npm.
+
+    5. Run the command "npx create-react-app <project-name>"
+        CRA - Create-React-App
+
+    6. npm start
+            Starts the development server.
+
+    7. npm run build
+        Bundles the app into static files for production.
+
+    8. npm test
+        Starts the test runner.
+
+    9. npm run eject
+        Removes this tool and copies build dependencies, configuration files
+        and scripts into the app directory. If you do this, you can’t go back!
