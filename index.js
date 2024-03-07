@@ -13,8 +13,10 @@ const PORT = process.env.PORT
 //instance expess
 const app = express()
 
+
 //declare document folder as static
 app.use(express.static('documents'))
+app.use(express.static('views'))
 
 //bodyparser middleware for incoming data..
 app.use(express.urlencoded({ extended: true}))
@@ -23,10 +25,25 @@ app.use(express.json())
 //middleware
 app.use(cors())
 
+//template engine settings
+app.set('view engine', 'ejs')
+app.set('views', "./views")
+
 //index route
 app.get(`/`, async(req, res)=>{
     try {
-        return res.status(StatusCodes.ACCEPTED).json({status : true, msg: `Welcome to fileUpload`})
+        // return res.status(StatusCodes.ACCEPTED).json({status : true, msg: `Welcome to fileUpload`})
+        return res.render('index.ejs')
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status : false, msg : error})
+    }
+})
+
+//upload GUI
+app.get(`/upload`, async(req, res)=>{
+    try {
+        // return res.status(StatusCodes.ACCEPTED).json({status : true, msg: `Welcome to fileUpload`})
+        return res.render('upload.ejs')
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status : false, msg : error})
     }
